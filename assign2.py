@@ -70,8 +70,8 @@ def calculate_concession_cost(concession_type, quantity, size=None):
     concession_type = concession_type.strip().lower()
     if concession_type in {"popcorn", "drinks"}:
         size = size.strip().lower() if size else ""
-        if size in size_prices:
-            return round(size_prices[size] * quantity, 2)
+        if size in {"small", "medium", "large"}:
+            return round(size_prices[f"{size} {concession_type}"] * quantity, 2)
         return -1
     elif concession_type in prices:
         return round(prices[concession_type] * quantity, 2)
@@ -121,6 +121,10 @@ def concessions_option():
             break
         print("Invalid Concession type. Please try again.")
     
+    if concession_type.lower() == "daily special":
+        concession_type = get_daily_special()
+        print(f"You have selected the daily special: {concession_type}")
+    
     size = None
     if concession_type.lower() in {"popcorn", "drinks"}:
         while True:
@@ -137,9 +141,6 @@ def concessions_option():
             print("Quantity must be greater than zero.")
         except ValueError:
             print("Please enter a valid integer.")
-    
-    if concession_type.lower() == "daily special":
-        concession_type = get_daily_special()
     
     return concession_type.strip().lower(), quantity, size
 
