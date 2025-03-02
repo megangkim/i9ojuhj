@@ -71,7 +71,7 @@ def calculate_concession_cost(concession_type, quantity, size=None):
     if concession_type in {"popcorn", "drinks"}:
         size = size.strip().lower() if size else ""
         if size in {"small", "medium", "large"}:
-            return round(size_prices[f"{size} {concession_type}s"] * quantity, 2)
+            return round(size_prices[f"{size} {concession_type}"] * quantity, 2)
         return -1
     elif concession_type in prices:
         return round(prices[concession_type] * quantity, 2)
@@ -144,3 +144,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
