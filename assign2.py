@@ -64,14 +64,14 @@ def calculate_ticket_cost(ticket_type, quantity):
 def calculate_concession_cost(concession_type, quantity, size=None):
     """Calculates the cost of a concession item, considering size if applicable."""
     prices = {"candy": CANDY, "nachos": NACHOS, "hot dog": HOT_DOG}
-    size_prices = {"small": SMALL_POPCORN, "medium": MEDIUM_POPCORN, "large": LARGE_POPCORN,
-                   "small drink": SMALL_DRINK, "medium drink": MEDIUM_DRINK, "large drink": LARGE_DRINK}
+    size_prices = {"small popcorn": SMALL_POPCORN, "medium popcorn": MEDIUM_POPCORN, "large popcorn": LARGE_POPCORN,
+                   "small drinks": SMALL_DRINK, "medium drinks": MEDIUM_DRINK, "large drinks": LARGE_DRINK}
     
     concession_type = concession_type.strip().lower()
     if concession_type in {"popcorn", "drinks"}:
         size = size.strip().lower() if size else ""
         if size in {"small", "medium", "large"}:
-            return round(size_prices[f"{size} {concession_type}"] * quantity, 2)
+            return round(size_prices[f"{size} {concession_type}s"] * quantity, 2)
         return -1
     elif concession_type in prices:
         return round(prices[concession_type] * quantity, 2)
@@ -112,37 +112,6 @@ def ticket_option():
             print("Please enter a valid integer.")
     
     return ticket_type.strip().lower(), quantity
-
-def concessions_option():
-    """Handles concession selection and returns the type, quantity, and size."""
-    while True:
-        concession_type = input("Select concession type (Popcorn, Drinks, Candy, Nachos, Hot Dog, Daily Special): ")
-        if validate_input("concessions", concession_type):
-            break
-        print("Invalid Concession type. Please try again.")
-    
-    if concession_type.lower() == "daily special":
-        concession_type = get_daily_special()
-        print(f"You have selected the daily special: {concession_type}")
-    
-    size = None
-    if concession_type.lower() in {"popcorn", "drinks"}:
-        while True:
-            size = input("Select size (small, medium, large): ").strip().lower()
-            if size in {"small", "medium", "large"}:
-                break
-            print("Invalid size. Please select 'small', 'medium', or 'large'.")
-    
-    while True:
-        try:
-            quantity = int(input("Enter quantity (greater than 0): "))
-            if quantity > 0:
-                break
-            print("Quantity must be greater than zero.")
-        except ValueError:
-            print("Please enter a valid integer.")
-    
-    return concession_type.strip().lower(), quantity, size
 
 def main():
     """Main function to process user selections and calculate total cost."""
