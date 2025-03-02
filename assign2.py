@@ -102,6 +102,25 @@ def calculate_concession_cost(concession_type, quantity, size=None):
         return round(CONCESSION_PRICES[concession_type] * quantity, 2)
     return -1
 
+def ticket_option():
+    """
+    Handles user input for selecting a ticket type and quantity.
+    :return: (str, int) The ticket type and quantity.
+    """
+    while True:
+        ticket_type = input("Select a ticket type (Regular, 3D, IMAX, Children, Senior): ").strip().lower()
+        if validate_input("movie tickets", ticket_type):
+            break
+        print("Invalid Movie Ticket type. Please try again.")
+    while True:
+        try:
+            quantity = int(input("Enter quantity (greater than 0): "))
+            if quantity > 0:
+                return ticket_type, quantity
+            print("Quantity must be greater than zero.")
+        except ValueError:
+            print("Please enter a valid integer.")
+
 def apply_discount(subtotal, number_of_tickets):
     """
     Applies the best discount available based on membership or family package.
@@ -123,13 +142,6 @@ def calculate_tax(subtotal):
     """
     return round(subtotal * TAX_RATE, 2)
 
-def get_daily_special():
-    """
-    Selects a random daily special from the list.
-    :return: (str) The selected daily special item.
-    """
-    return random.choice(DAILY_SPECIALS)
-
 def main():
     """
     Main function that handles user input, calculates totals, applies discounts and prints the final amount.
@@ -144,15 +156,6 @@ def main():
             ticket_type, quantity = ticket_option()
             subtotal += calculate_ticket_cost(ticket_type, quantity)
             ticket_count += quantity
-        elif choice == "concessions":
-            concession_type, quantity, size = concessions_option()
-            subtotal += calculate_concession_cost(concession_type, quantity, size)
-        else:
-            print("Invalid category type. Please try again.")
-    
-    if subtotal == 0:
-        print("You don't seem to have ordered anything.")
-        return
     
     subtotal = apply_discount(subtotal, ticket_count)
     tax = calculate_tax(subtotal)
